@@ -1,0 +1,32 @@
+{
+  "name": "openai-telegram",
+  "version": "1.0.0",
+  "description": "telegram chatbot using openAI",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rincemathew/openai-telegram.git"
+  },
+  "keywords": [
+    "telegram",
+    "openai",
+    "nodejs"
+  ],
+  "author": "Rince Mathew",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rincemathew/openai-telegram/issues"
+  },
+  "homepage": "https://github.com/rincemathew/openai-telegram#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.43.0",
+    "readline-sync": "^1.4.10"
+  }
+}
