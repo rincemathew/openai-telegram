@@ -14,29 +14,33 @@ const openai = new OpenAI.OpenAI({
 const token = process.env.RinceOpenAIBot;
 const bot = new TelegramBot(token, {polling: true});
 
-bot.onText(/\/echo (.+)/, (msg, match) => {
+// bot.onText(/\/start (.+)/, (msg, match) => {
+//   const chatId = msg.chat.id;
+//   const resp = match[1];
+//   bot.sendMessage(chatId, "Welcome to Chatbot powered by OPENAI, Ask anything you want...");
+// });
+
+bot.on('message', async(msg) => {
   const chatId = msg.chat.id;
-  const resp = match[1];
-  bot.sendMessage(chatId, resp);
+  let openCall = await openAICall(msg.text)
+  bot.sendMessage(chatId, openCall);
 });
 
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
 
-  bot.sendMessage(chatId, 'Received your message');
-});
-
-
-async function main() {
+async function openAICall(text) {
+  if(text === "/start") {
+    return "Welcome to Chatbot powered by OPENAI, Ask anything you want..."
+  }
   try {
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: "wHAT IS THE CAPITAL OF INDIA?" }],
+      messages: [{ role: "user", content: text }],
     });
-    console.log(chatCompletion.choices[0].message.content);
+    return chatCompletion.choices[0].message.content
+    // console.log(chatCompletion.choices[0].message.content);
   } catch (error) {
     console.log(error);
+    return error.message
   }
 }
 
-main();
