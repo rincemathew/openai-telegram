@@ -14,12 +14,6 @@ const openai = new OpenAI.OpenAI({
 const token = process.env.RinceOpenAIBot;
 const bot = new TelegramBot(token, {polling: true});
 
-// bot.onText(/\/start (.+)/, (msg, match) => {
-//   const chatId = msg.chat.id;
-//   const resp = match[1];
-//   bot.sendMessage(chatId, "Welcome to Chatbot powered by OPENAI, Ask anything you want...");
-// });
-
 bot.on('message', async(msg) => {
   const chatId = msg.chat.id;
   let openCall = await openAICall(msg.text)
@@ -37,7 +31,6 @@ async function openAICall(text) {
       messages: [{ role: "user", content: text }],
     });
     return chatCompletion.choices[0].message.content
-    // console.log(chatCompletion.choices[0].message.content);
   } catch (error) {
     console.log(error);
     return error.message
