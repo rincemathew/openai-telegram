@@ -3,7 +3,7 @@
 This is openAI telegram bot.
 
 search for "rince_bot" in telegram and explore open ai.....
-<!-- or @RinceOpenAIBot -->
+or @RinceOpenAIBot
 
 Note: if you are not getting response from telegram bot please contact me for demo.
 there are two chances to fail to get response,
@@ -12,3 +12,8 @@ there are two chances to fail to get response,
 
 
 <!-- https://openai-telegram-s21p.onrender.com -->
+<!-- account rincemathew572@gmail.com -->
+
+Demo link: [https://youtu.be/nLv5hN6jKeI](https://youtu.be/nLv5hN6jKeI)
+
+![screenshot](images/telegramopenai.png)
