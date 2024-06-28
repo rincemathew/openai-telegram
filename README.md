@@ -2,8 +2,8 @@
 
 This is openAI telegram bot.
 
-
-rince_bot or @RinceOpenAIBot
+search for "rince_bot" in telegram and explore open ai.....
+<!-- or @RinceOpenAIBot -->
 
 Note: if you are not getting response from telegram bot please contact me for demo.
 there are two chances to fail to get response,
