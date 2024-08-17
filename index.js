@@ -1,53 +1,77 @@
 import OpenAI from "openai";
-
-import TelegramBot from 'node-telegram-bot-api'
-
+import TelegramBot from 'node-telegram-bot-api';
 import dotenv from "dotenv";
+import express from "express";
+
 dotenv.config();
 
-//in-memory store for user session
+// In-memory store for user sessions
 const userSessions = {};
 
-//open api token
+// OpenAI configuration
 const openai = new OpenAI.OpenAI({
   project: "proj_JWVPjsDeGT3qO7WPSXtipv7U",
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-//telegram token
+// Telegram bot configuration
 const token = process.env.RinceOpenAIBot;
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(token, { polling: true });
 
+// Express setup
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-//telegram bot polling
-bot.on('message', async(msg) => {
+// Express root route
+app.get("/", (req, res) => {
+  res.send("Telegram Bot is running!");
+});
+
+// Telegram bot message handling
+bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
+
   // Initialize conversation history if it doesn't exist
-  if (!userSessions[msg.chat.id]) {
-    userSessions[msg.chat.id] = [];
+  if (!userSessions[chatId]) {
+    userSessions[chatId] = [];
   }
+
   // Add the user's message to the conversation history
-  userSessions[msg.chat.id].push({ role: 'user', content: msg.text });
-  let openCall = await openAICall(msg.chat.id, msg.text)
+  userSessions[chatId].push({ role: 'user', content: msg.text });
+
+  // Generate response using OpenAI
+  const openCall = await openAICall(chatId, msg.text);
+
+  // Send the response back to the user
   bot.sendMessage(chatId, openCall);
 });
 
-
-async function openAICall(iddd, text) {
-  if(text === "/start") {
-    return "Welcome to Chatbot powered by OPENAI, Ask anything you want..."
+// OpenAI API call function
+async function openAICall(chatId, text) {
+  if (text === "/start") {
+    return "Welcome to Chatbot powered by OPENAI, Ask anything you want...";
   }
+
   try {
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: userSessions[iddd],
+      messages: userSessions[chatId],
     });
-    // Add the bot's message to the conversation histor
-    userSessions[iddd].push({ role: 'assistant', content: chatCompletion.choices[0].message.content });
-    return chatCompletion.choices[0].message.content
+
+    // Add the bot's message to the conversation history
+    userSessions[chatId].push({
+      role: 'assistant',
+      content: chatCompletion.choices[0].message.content,
+    });
+
+    return chatCompletion.choices[0].message.content;
   } catch (error) {
-    console.log(error);
-    return error.message
+    console.error(error);
+    return "There was an error processing your request. Please try again later.";
   }
 }
 
+// Start the Express server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
